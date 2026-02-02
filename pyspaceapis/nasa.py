@@ -5,9 +5,9 @@ from requests.exceptions import HTTPError, ReadTimeout, ConnectTimeout
 class NASAClient:
 
     # APOD, NeoWs, and DONKI Base Url
-    _base_nasa_url = "https://api.nasa.gov"
+    _BASE_NASA_URL = "https://api.nasa.gov"
     # EONET Base Url
-    _base_eonet_url = "https://eonet.gsfc.nasa.gov/api/v3"
+    _BASE_EONET_URL = "https://eonet.gsfc.nasa.gov/api/v3"
 
     def __init__(self,
                  api_key: str | None = "DEMO_KEY",
@@ -49,17 +49,17 @@ class NASAClient:
         """
 
         # Requests Session and API Key
-        self._session = requests.Session()
-        self._api_key = api_key
+        self._SESSION = requests.Session()
+        self._API_KEY = api_key
 
         # Default Timeout Retry Delays
-        self._default_retry_delays = default_retry_delays or [10, 15, 30]
+        self._DEFAULT_RETRY_DELAYS = default_retry_delays or [10, 15, 30]
 
         # Timeout Print
         if timeout_print:
-            self._timeout_print = "(Request timed out after {previous_delay} seconds. Retrying for {delay} seconds.)\n"
+            self._TIMEOUT_PRINT = "(Request timed out after {previous_delay} seconds. Retrying for {delay} seconds.)\n"
         if not timeout_print:
-            self._timeout_print = ""
+            self._TIMEOUT_PRINT = ""
 
     def get_headers(self,
                     remaining_amount: bool | None = True,
@@ -89,7 +89,7 @@ class NASAClient:
                 "Both remaining_amount and total_amount cannot be False."
             )
 
-        response = self._session.get(f"{self._base_nasa_url}/neo/rest/v1/neo/2001980?api_key={self._api_key}")
+        response = self._SESSION.get(f"{self._BASE_NASA_URL}/neo/rest/v1/neo/2001980?api_key={self._API_KEY}")
 
         remaining = response.headers.get("X-RateLimit-Remaining")
         total = response.headers.get("X-RateLimit-Limit")
@@ -165,8 +165,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/planetary/apod"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/planetary/apod"
+        params = {"api_key": self._API_KEY}
 
         if date:
             params["date"] = date
@@ -183,14 +183,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -241,8 +241,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/neo/rest/v1/feed"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/neo/rest/v1/feed"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["start_date"] = start_date
@@ -253,14 +253,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -305,21 +305,21 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/neo/rest/v1/neo/{asteroid_id}"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/neo/rest/v1/neo/{asteroid_id}"
+        params = {"api_key": self._API_KEY}
 
         timing_out = False
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -359,21 +359,21 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/neo/rest/v1/neo/browse"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/neo/rest/v1/neo/browse"
+        params = {"api_key": self._API_KEY}
 
         timing_out = False
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -425,8 +425,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/CME"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/CME"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -437,14 +437,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -523,8 +523,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/CMEAnalysis"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/CMEAnalysis"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -547,14 +547,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -605,8 +605,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/GST"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/GST"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -617,14 +617,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -685,8 +685,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/IPS"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/IPS"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -701,14 +701,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -759,8 +759,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/FLR"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/FLR"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -771,14 +771,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -829,8 +829,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/SEP"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/SEP"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -841,14 +841,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -899,8 +899,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/MPC"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/MPC"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -911,14 +911,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -969,8 +969,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/RBE"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/RBE"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -981,14 +981,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1039,8 +1039,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/HSS"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/HSS"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -1051,14 +1051,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1109,8 +1109,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/WSAEnlilSimulations"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/WSAEnlilSimulations"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -1121,14 +1121,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1184,8 +1184,8 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_nasa_url}/DONKI/notifications"
-        params = {"api_key": self._api_key}
+        url = f"{self._BASE_NASA_URL}/DONKI/notifications"
+        params = {"api_key": self._API_KEY}
 
         if start_date:
             params["startDate"] = start_date
@@ -1198,14 +1198,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1309,7 +1309,7 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_eonet_url}/events"
+        url = f"{self._BASE_EONET_URL}/events"
         params = {}
 
         if source:
@@ -1340,14 +1340,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1450,7 +1450,7 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_eonet_url}/events"
+        url = f"{self._BASE_EONET_URL}/events"
         params = {}
 
         if source:
@@ -1481,14 +1481,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1568,11 +1568,11 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_eonet_url}/categories"
+        url = f"{self._BASE_EONET_URL}/categories"
         params = {}
 
         if category:
-            url = f"{self._base_eonet_url}/categories/{category}"
+            url = f"{self._BASE_EONET_URL}/categories/{category}"
         if source:
             params["source"] = source
         if status:
@@ -1590,14 +1590,14 @@ class NASAClient:
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, params=params, timeout=delay)
+                response = self._SESSION.get(url, params=params, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
@@ -1652,20 +1652,20 @@ class NASAClient:
             ten seconds, etc.) This defaults to [10, 15, 30]
         """
 
-        url = f"{self._base_eonet_url}/layers/{category}"
+        url = f"{self._BASE_EONET_URL}/layers/{category}"
 
         timing_out = False
         previous_delay = None
         timeout_error = None
 
-        for delay in retry_delays or self._default_retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._timeout_print.format(previous_delay=previous_delay, delay=delay)
+                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
                 )
 
             try:
-                response = self._session.get(url, timeout=delay)
+                response = self._SESSION.get(url, timeout=delay)
                 response.raise_for_status()
 
                 return response.json()
