@@ -61,6 +61,51 @@ class NASAClient:
         if not timeout_print:
             self._TIMEOUT_PRINT = ""
 
+    def __get_data(
+            self,
+            url: str,
+            params: dict | None,
+            retry_delays: list[float]
+    ) -> dict:
+        """
+        The main internal method for
+        handling get requests.
+
+        :param url: the URL to retrieve data from.
+        :param params: The dictionary of parameters to pass to the request.
+        :param retry_delays: The list of delays to attempt the request with.
+        """
+
+        timing_out = False
+        previous_delay = None
+        timeout_error = None
+
+        if not params:
+            params = {}
+
+        for delay in retry_delays:
+            if timing_out:
+                print(self._TIMEOUT_PRINT.format(
+                    previous_delay=previous_delay, delay=delay,
+                ))
+
+            try:
+                response = self._SESSION.get(
+                    url, params=params, timeout=delay
+                )
+                response.raise_for_status()
+                return response.json()
+
+            except (ConnectTimeout, ReadTimeout) as error:
+                timing_out = True
+                previous_delay = delay
+                timeout_error = error
+            except HTTPError:
+                raise
+        else:
+            print(f"Retrieved no response from '{url}'...\n")
+            raise timeout_error
+
     def get_headers(self,
                     remaining_amount: bool | None = True,
                     total_amount: bool | None = True) -> dict:
@@ -179,41 +224,9 @@ class NASAClient:
         if thumbs:
             params["thumbs"] = str(thumbs)
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     # Near Earth Object Web Service ( NeoWs )
     def neows_feed(self,
@@ -249,41 +262,9 @@ class NASAClient:
         if end_date:
             params["end_date"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def neows_lookup(self,
                      asteroid_id: int,
@@ -308,41 +289,9 @@ class NASAClient:
         url = f"{self._BASE_NASA_URL}/neo/rest/v1/neo/{asteroid_id}"
         params = {"api_key": self._API_KEY}
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def neows_browse(self,
                      retry_delays: list[float] | None = None) -> dict:
@@ -362,41 +311,9 @@ class NASAClient:
         url = f"{self._BASE_NASA_URL}/neo/rest/v1/neo/browse"
         params = {"api_key": self._API_KEY}
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     # Space Weather Database Of Notifications, Knowledge, Information ( DONKI )
     def donki_cme(self,
@@ -433,41 +350,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_cme_analysis(self,
                            start_date: str | None = None,
@@ -543,41 +428,9 @@ class NASAClient:
         if keyword:
             params["keyword"] = keyword
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_gst(self,
                   start_date: str | None = None,
@@ -613,41 +466,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_ips(self,
                   start_date: str | None = None,
@@ -697,41 +518,9 @@ class NASAClient:
         if catalog:
             params["catalog"] = catalog
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_flr(self,
                   start_date: str | None = None,
@@ -767,41 +556,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_sep(self,
                   start_date: str | None = None,
@@ -837,41 +594,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_mpc(self,
                   start_date: str | None = None,
@@ -907,41 +632,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_rbe(self,
                   start_date: str | None = None,
@@ -977,41 +670,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_hss(self,
                   start_date: str | None = None,
@@ -1047,41 +708,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_wsa_es(self,
                      start_date: str | None = None,
@@ -1117,41 +746,9 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def donki_notifications(self,
                             start_date: str | None = None,
@@ -1194,41 +791,9 @@ class NASAClient:
         if notification_type:
             params["type"] = notification_type
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     # The Earth Observatory Natural Event Tracker (EONET)
     def eonet_events(self,
@@ -1336,41 +901,9 @@ class NASAClient:
             values = ",".join(map(str, bounding_box))
             params["bbox"] = values
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def eonet_events_geojson(self,
                              source: str | None = None,
@@ -1477,41 +1010,9 @@ class NASAClient:
             values = ",".join(map(str, bounding_box))
             params["bbox"] = values
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def eonet_categories(self,
                          category: str | None = None,
@@ -1586,41 +1087,9 @@ class NASAClient:
         if end_date:
             params["end"] = end_date
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, params=params, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
 
     def eonet_layers(self,
                      category: str,
@@ -1654,38 +1123,6 @@ class NASAClient:
 
         url = f"{self._BASE_EONET_URL}/layers/{category}"
 
-        timing_out = False
-        previous_delay = None
-        timeout_error = None
-
-        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
-                print(
-                    self._TIMEOUT_PRINT.format(previous_delay=previous_delay, delay=delay)
-                )
-
-            try:
-                response = self._SESSION.get(url, timeout=delay)
-                response.raise_for_status()
-
-                return response.json()
-
-            except (ConnectTimeout,
-                    ReadTimeout) as e:
-                timing_out = True
-                previous_delay = delay
-
-                if ConnectTimeout:
-                    timeout_error = ConnectTimeout(
-                        f"{e}"
-                    )
-                if ReadTimeout:
-                    timeout_error = ReadTimeout(
-                        f"{e}"
-                    )
-
-            except HTTPError:
-                raise
-
-        else:
-            raise timeout_error
+        return self.__get_data(
+            url, None, retry_delays or self._DEFAULT_RETRY_DELAYS
+        )
