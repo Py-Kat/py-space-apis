@@ -9,10 +9,12 @@ class NASAClient:
     # EONET Base Url
     _BASE_EONET_URL = "https://eonet.gsfc.nasa.gov/api/v3"
 
-    def __init__(self,
-                 api_key: str | None = "DEMO_KEY",
-                 default_retry_delays: list[float] | None = None,
-                 timeout_print: bool | None = False):
+    def __init__(
+            self,
+            api_key: str | None = "DEMO_KEY",
+            default_retry_delays: list[float] | None = None,
+            timeout_print: bool | None = False
+    ):
         """
         This is where you enter your NASA API key
         for handling requests made to the NASA API. If
@@ -106,9 +108,11 @@ class NASAClient:
             print(f"Retrieved no response from '{url}'...\n")
             raise timeout_error
 
-    def get_headers(self,
-                    remaining_amount: bool | None = True,
-                    total_amount: bool | None = True) -> dict:
+    def get_headers(
+            self,
+            remaining_amount: bool | None = True,
+            total_amount: bool | None = True
+    ) -> dict:
         """
          Using this class method, you can retrieve the X-RateLimit
          HTTP headers containing the remaining requests and total
@@ -159,13 +163,15 @@ class NASAClient:
         return headers
 
     # Astronomy Picture of the Day API ( APOD )
-    def apod(self,
-             date: str | None = None,
-             start_date: str | None = None,
-             end_date: str | None = None,
-             count: int | None = None,
-             thumbs: bool | None = None,
-             retry_delays: list[float] | None = None) -> dict:
+    def apod(
+            self,
+            date: str | None = None,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            count: int | None = None,
+            thumbs: bool | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         "This endpoint structures the APOD
         imagery and associated metadata so
@@ -229,10 +235,12 @@ class NASAClient:
         )
 
     # Near Earth Object Web Service ( NeoWs )
-    def neows_feed(self,
-                   start_date: str | None = None,
-                   end_date: str | None = None,
-                   retry_delays: list[float] | None = None) -> dict:
+    def neows_feed(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         "Retrieve a list of Asteroids based on their closest approach date to Earth!"
 
@@ -266,9 +274,11 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def neows_lookup(self,
-                     asteroid_id: int,
-                     retry_delays: list[float] | None = None) -> dict:
+    def neows_lookup(
+            self,
+            asteroid_id: int,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         "Lookup a specific asteroid based on its NASA JPL small body (SPK-ID) ID!"
 
@@ -293,8 +303,10 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def neows_browse(self,
-                     retry_delays: list[float] | None = None) -> dict:
+    def neows_browse(
+            self,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         "Browse the overall Asteroid data-set!"
 
@@ -316,10 +328,12 @@ class NASAClient:
         )
 
     # Space Weather Database Of Notifications, Knowledge, Information ( DONKI )
-    def donki_cme(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_cme(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves basic DONKI Coronal Mass Injection analyses (CMEs)
         within a specific time frame!
@@ -354,16 +368,18 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_cme_analysis(self,
-                           start_date: str | None = None,
-                           end_date: str | None = None,
-                           most_accurate_only: bool = True,
-                           complete_entry_only: bool = True,
-                           speed: int = 0,
-                           half_angle: int = 0,
-                           catalog: str | None = None,
-                           keyword: str | None = None,
-                           retry_delays: list[float] | None = None) -> dict:
+    def donki_cme_analysis(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            most_accurate_only: bool = True,
+            complete_entry_only: bool = True,
+            speed: int = 0,
+            half_angle: int = 0,
+            catalog: str | None = None,
+            keyword: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves more robust analyses from DONKI Coronal Mass Injections (CMEs)
         within a specific time frame, accuracy, catalog, and/or keyword!
@@ -432,10 +448,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_gst(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_gst(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Geomagnetic Storm analyses (GSTs)
         within a specific time frame!
@@ -470,12 +488,14 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_ips(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  location: str | None = None,
-                  catalog: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_ips(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            location: str | None = None,
+            catalog: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Interplanetary Shock analyses (IPSs)
         within a specific time frame, location, and/or catalog!
@@ -522,10 +542,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_flr(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_flr(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Solar Flare analyses (FLRs)
         within a specific time frame!
@@ -560,10 +582,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_sep(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_sep(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Solar Energetic Particle analyses (SEP)
         within a specific time frame!
@@ -598,10 +622,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_mpc(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_mpc(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Magnetopause Crossing analyses (MPC)
         within a specific time frame!
@@ -636,10 +662,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_rbe(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_rbe(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Radiation Belt Enhancement analyses (RBE)
         within a specific time frame!
@@ -674,10 +702,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_hss(self,
-                  start_date: str | None = None,
-                  end_date: str | None = None,
-                  retry_delays: list[float] | None = None) -> dict:
+    def donki_hss(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI Hight Speed Stream analyses (HSS)
         within a specific time frame!
@@ -712,10 +742,12 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_wsa_es(self,
-                     start_date: str | None = None,
-                     end_date: str | None = None,
-                     retry_delays: list[float] | None = None) -> dict:
+    def donki_wsa_es(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieves DONKI WSA+EnlilSimulation analyses
         within a specific time frame!
@@ -750,11 +782,13 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def donki_notifications(self,
-                            start_date: str | None = None,
-                            end_date: str | None = None,
-                            notification_type: str | None = None,
-                            retry_delays: list[float] | None = None) -> dict:
+    def donki_notifications(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            notification_type: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieve DONKI Notifications within a specific time frame
         and/or a notification type!
@@ -796,19 +830,21 @@ class NASAClient:
         )
 
     # The Earth Observatory Natural Event Tracker (EONET)
-    def eonet_events(self,
-                     source: str | None = None,
-                     category: str | None = None,
-                     status: str | None = None,
-                     limit: int | None = None,
-                     days: int | None = None,
-                     start_date: str | None = None,
-                     end_date: str | None = None,
-                     mag_id: str | None = None,
-                     mag_min: float | None = None,
-                     mag_max: float | None = None,
-                     bounding_box: list[float] | None = None,
-                     retry_delays: list[float] | None = None) -> dict:
+    def eonet_events(
+            self,
+            source: str | None = None,
+            category: str | None = None,
+            status: str | None = None,
+            limit: int | None = None,
+            days: int | None = None,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            mag_id: str | None = None,
+            mag_min: float | None = None,
+            mag_max: float | None = None,
+            bounding_box: list[float] | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieve Earth Observatory Natural Event Tracker (EONET)
         events with up to eleven optional parameters. Such as: Source,
@@ -905,19 +941,21 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def eonet_events_geojson(self,
-                             source: str | None = None,
-                             category: str | None = None,
-                             status: str | None = None,
-                             limit: int | None = None,
-                             days: int | None = None,
-                             start_date: str | None = None,
-                             end_date: str | None = None,
-                             mag_id: str | None = None,
-                             mag_min: float | None = None,
-                             mag_max: float | None = None,
-                             bounding_box: list[float] | None = None,
-                             retry_delays: list[float] | None = None) -> dict:
+    def eonet_events_geojson(
+            self,
+            source: str | None = None,
+            category: str | None = None,
+            status: str | None = None,
+            limit: int | None = None,
+            days: int | None = None,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            mag_id: str | None = None,
+            mag_min: float | None = None,
+            mag_max: float | None = None,
+            bounding_box: list[float] | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         Retrieve Earth Observatory Natural Event Tracker (EONET)
         GeoJSON events with up to eleven optional parameters. Such as:
@@ -1014,15 +1052,17 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def eonet_categories(self,
-                         category: str | None = None,
-                         source: str | None = None,
-                         status: str | None = None,
-                         limit: int | None = None,
-                         days: int | None = None,
-                         start_date: str | None = None,
-                         end_date: str | None = None,
-                         retry_delays: list[float] | None = None) -> dict:
+    def eonet_categories(
+            self,
+            category: str | None = None,
+            source: str | None = None,
+            status: str | None = None,
+            limit: int | None = None,
+            days: int | None = None,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         "Categories are the types of events by which individual
         events are cataloged. Categories can be used to filter
@@ -1091,9 +1131,11 @@ class NASAClient:
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
-    def eonet_layers(self,
-                     category: str,
-                     retry_delays: list[float] | None = None) -> dict:
+    def eonet_layers(
+            self,
+            category: str,
+            retry_delays: list[float] | None = None
+    ) -> dict:
         """
         "A Layer is a reference to a specific web service
         (e.g., WMS, WMTS) that can be used to produce imagery
