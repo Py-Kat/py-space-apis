@@ -13,7 +13,7 @@ class NASAClient:
             self,
             api_key: str | None = "DEMO_KEY",
             default_retry_delays: list[float] | None = None,
-            timeout_print: bool | None = False
+            timeout_print: bool = False
     ):
         """
         This is where you enter your NASA API key
@@ -110,8 +110,8 @@ class NASAClient:
 
     def get_headers(
             self,
-            remaining_amount: bool | None = True,
-            total_amount: bool | None = True
+            remaining_amount: bool = True,
+            total_amount: bool = True
     ) -> dict:
         """
          Using this class method, you can retrieve the X-RateLimit
@@ -169,7 +169,7 @@ class NASAClient:
             start_date: str | None = None,
             end_date: str | None = None,
             count: int | None = None,
-            thumbs: bool | None = None,
+            thumbs: bool = False,
             retry_delays: list[float] | None = None
     ) -> dict:
         """
@@ -374,8 +374,8 @@ class NASAClient:
             end_date: str | None = None,
             most_accurate_only: bool = True,
             complete_entry_only: bool = True,
-            speed: int = 0,
-            half_angle: int = 0,
+            speed: int | None = 0,
+            half_angle: int | None = 0,
             catalog: str | None = None,
             keyword: str | None = None,
             retry_delays: list[float] | None = None
@@ -920,9 +920,9 @@ class NASAClient:
         if status:
             params["status"] = status
         if limit:
-            params["limit"] = limit
+            params["limit"] = str(limit)
         if days:
-            params["days"] = days
+            params["days"] = str(days)
         if start_date:
             params["start"] = start_date
         if end_date:
@@ -930,9 +930,9 @@ class NASAClient:
         if mag_id:
             params["magID"] = mag_id
         if mag_min:
-            params["magMin"] = mag_min
+            params["magMin"] = str(mag_min)
         if mag_max:
-            params["magMax"] = mag_max
+            params["magMax"] = str(mag_max)
         if bounding_box:
             values = ",".join(map(str, bounding_box))
             params["bbox"] = values
@@ -1031,9 +1031,9 @@ class NASAClient:
         if status:
             params["status"] = status
         if limit:
-            params["limit"] = limit
+            params["limit"] = str(limit)
         if days:
-            params["days"] = days
+            params["days"] = str(days)
         if start_date:
             params["start"] = start_date
         if end_date:
@@ -1041,9 +1041,9 @@ class NASAClient:
         if mag_id:
             params["magID"] = mag_id
         if mag_min:
-            params["magMin"] = mag_min
+            params["magMin"] = str(mag_min)
         if mag_max:
-            params["magMax"] = mag_max
+            params["magMax"] = str(mag_max)
         if bounding_box:
             values = ",".join(map(str, bounding_box))
             params["bbox"] = values
@@ -1119,9 +1119,9 @@ class NASAClient:
         if status:
             params["status"] = status
         if limit:
-            params["limit"] = limit
+            params["limit"] = str(limit)
         if days:
-            params["days"] = days
+            params["days"] = str(days)
         if start_date:
             params["start"] = start_date
         if end_date:
