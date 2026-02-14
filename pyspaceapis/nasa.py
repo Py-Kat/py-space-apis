@@ -136,34 +136,30 @@ class NASAClient:
             number of requests. This defaults to True.
         """
 
-        if not remaining_amount and not total_amount:
-            raise ValueError(
-                "Both 'remaining_amount' and 'total_amount' cannot be False."
-            )
-
-        response = self._SESSION.get(f"{self._BASE_NASA_URL}/neo/rest/v1/neo/2001980?api_key={self._API_KEY}")
+        response = self._SESSION.get(
+            f"{self._BASE_NASA_URL}/neo/rest/v1/neo/2001980?api_key={self._API_KEY}"
+        )
 
         remaining = response.headers.get("X-RateLimit-Remaining")
         total = response.headers.get("X-RateLimit-Limit")
 
-        headers = None
-        if remaining_amount:
-            headers = {
+        if remaining_amount and not total_amount:
+            return {
                 "rate_limit_remaining": remaining
             }
-
-        if total_amount:
-            headers = {
+        elif total_amount and not remaining_amount:
+            return {
                 "rate_limit_total": total
             }
-
-        if remaining_amount and total_amount:
-            headers = {
+        elif remaining_amount and total_amount:
+            return {
                 "rate_limit_remaining": remaining,
                 "rate_limit_total": total
             }
-
-        return headers
+        else:
+            raise ValueError(
+                "Both 'remaining_amount' and 'total_amount' cannot be False simultaneously."
+            )
 
     # Astronomy Picture of the Day API ( APOD )
     def apod(
