@@ -126,6 +126,9 @@ class NASAClient:
          rate_limit_total: This is the total number of requests allowed
          for the given API key within the hour reset window.
 
+         This method will raise a ValueError if both
+         'remaining_amount' and 'total_amount' are False.
+
          :param remaining_amount: Whether to retrieve the
             number of remaining requests. This defaults to True.
 
@@ -134,8 +137,8 @@ class NASAClient:
         """
 
         if not remaining_amount and not total_amount:
-            raise TypeError(
-                "Both remaining_amount and total_amount cannot be False."
+            raise ValueError(
+                "Both 'remaining_amount' and 'total_amount' cannot be False."
             )
 
         response = self._SESSION.get(f"{self._BASE_NASA_URL}/neo/rest/v1/neo/2001980?api_key={self._API_KEY}")
