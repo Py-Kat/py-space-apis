@@ -63,7 +63,7 @@ class NASAClient:
         if not timeout_print:
             self._TIMEOUT_PRINT = ""
 
-    def __get_data(
+    def _get_data(
             self,
             url: str,
             params: dict | None,
@@ -229,7 +229,7 @@ class NASAClient:
         if thumbs:
             params["thumbs"] = str(thumbs)
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -269,7 +269,7 @@ class NASAClient:
         if end_date:
             params["end_date"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -298,7 +298,7 @@ class NASAClient:
         url = f"{self._BASE_NASA_URL}/neo/rest/v1/neo/{asteroid_id}"
         params = {"api_key": self._API_KEY}
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -322,7 +322,7 @@ class NASAClient:
         url = f"{self._BASE_NASA_URL}/neo/rest/v1/neo/browse"
         params = {"api_key": self._API_KEY}
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -363,7 +363,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -443,7 +443,7 @@ class NASAClient:
         if keyword:
             params["keyword"] = keyword
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -483,7 +483,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -537,7 +537,7 @@ class NASAClient:
         if catalog:
             params["catalog"] = catalog
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -577,7 +577,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -617,7 +617,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -657,7 +657,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -697,7 +697,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -737,7 +737,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -777,7 +777,7 @@ class NASAClient:
         if end_date:
             params["endDate"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -824,7 +824,7 @@ class NASAClient:
         if notification_type:
             params["type"] = notification_type
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -936,7 +936,7 @@ class NASAClient:
             values = ",".join(map(str, bounding_box))
             params["bbox"] = values
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -1047,7 +1047,7 @@ class NASAClient:
             values = ",".join(map(str, bounding_box))
             params["bbox"] = values
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -1126,7 +1126,7 @@ class NASAClient:
         if end_date:
             params["end"] = end_date
 
-        return self.__get_data(
+        return self._get_data(
             url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
 
@@ -1164,6 +1164,6 @@ class NASAClient:
 
         url = f"{self._BASE_EONET_URL}/layers/{category}"
 
-        return self.__get_data(
+        return self._get_data(
             url, None, retry_delays or self._DEFAULT_RETRY_DELAYS
         )
