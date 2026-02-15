@@ -67,7 +67,7 @@ class NASAClient:
             self,
             url: str,
             params: dict | None,
-            retry_delays: list[float]
+            retry_delays: list[float] | None
     ) -> dict:
         """
         The main internal method for
@@ -85,7 +85,7 @@ class NASAClient:
         if not params:
             params = {}
 
-        for delay in retry_delays:
+        for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(self._TIMEOUT_PRINT.format(
                     previous_delay=previous_delay, delay=delay,
@@ -230,7 +230,7 @@ class NASAClient:
             params["thumbs"] = str(thumbs)
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     # Near Earth Object Web Service ( NeoWs )
@@ -270,7 +270,7 @@ class NASAClient:
             params["end_date"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def neows_lookup(
@@ -299,7 +299,7 @@ class NASAClient:
         params = {"api_key": self._API_KEY}
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def neows_browse(
@@ -323,7 +323,7 @@ class NASAClient:
         params = {"api_key": self._API_KEY}
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     # Space Weather Database Of Notifications, Knowledge, Information ( DONKI )
@@ -364,7 +364,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_cme_analysis(
@@ -444,7 +444,7 @@ class NASAClient:
             params["keyword"] = keyword
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_gst(
@@ -484,7 +484,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_ips(
@@ -538,7 +538,7 @@ class NASAClient:
             params["catalog"] = catalog
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_flr(
@@ -578,7 +578,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_sep(
@@ -618,7 +618,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_mpc(
@@ -658,7 +658,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_rbe(
@@ -698,7 +698,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_hss(
@@ -738,7 +738,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_wsa_es(
@@ -778,7 +778,7 @@ class NASAClient:
             params["endDate"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def donki_notifications(
@@ -825,7 +825,7 @@ class NASAClient:
             params["type"] = notification_type
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     # The Earth Observatory Natural Event Tracker (EONET)
@@ -937,7 +937,7 @@ class NASAClient:
             params["bbox"] = values
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def eonet_events_geojson(
@@ -1048,7 +1048,7 @@ class NASAClient:
             params["bbox"] = values
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def eonet_categories(
@@ -1127,7 +1127,7 @@ class NASAClient:
             params["end"] = end_date
 
         return self._get_data(
-            url, params, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, params, retry_delays
         )
 
     def eonet_layers(
@@ -1165,5 +1165,5 @@ class NASAClient:
         url = f"{self._BASE_EONET_URL}/layers/{category}"
 
         return self._get_data(
-            url, None, retry_delays or self._DEFAULT_RETRY_DELAYS
+            url, None, retry_delays
         )
