@@ -107,8 +107,14 @@ class NASAClient:
             except HTTPError:
                 raise
         else:
-            print(f"Retrieved no response from '{url}'...\n")
-            raise timeout_error
+            if isinstance(timeout_error, ConnectTimeout):
+                print(f"Timed out while establishing connection to '{url}'...\n")
+                raise timeout_error
+            elif isinstance(timeout_error, ReadTimeout):
+                print(f"Timed out while retrieving contents from '{url}'...\n")
+                raise timeout_error
+            else:
+                raise Exception("An unhandled or undefined exception occurred.")
 
     def get_headers(
             self,
