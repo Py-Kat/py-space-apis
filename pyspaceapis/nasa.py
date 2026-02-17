@@ -87,9 +87,11 @@ class NASAClient:
 
         for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
-                print(self._TIMEOUT_PRINT.format(
-                    previous_delay=previous_delay, delay=delay,
-                ))
+                print(
+                    self._TIMEOUT_PRINT.format(
+                        previous_delay=previous_delay, delay=delay
+                    )
+                )
 
             try:
                 response = self._SESSION.get(
