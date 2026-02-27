@@ -55,7 +55,7 @@ class NASAClient:
         self._API_KEY = api_key
 
         # Default Timeout Retry Delays
-        self._DEFAULT_RETRY_DELAYS = default_retry_delays or [10, 15, 30]
+        self._DEFAULT_RETRY_DELAYS = default_retry_delays or [30, 60, 90]
 
         # Timeout Print
         if timeout_print:
