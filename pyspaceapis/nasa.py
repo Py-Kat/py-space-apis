@@ -13,7 +13,7 @@ class NASAClient:
             self,
             api_key: str | None = "DEMO_KEY",
             default_retry_delays: list[float] | None = None,
-            timeout_print: bool = False
+            print_timeout_text: bool = False
     ):
         """
         This is where you enter your NASA API key
@@ -44,7 +44,7 @@ class NASAClient:
             set within class method parameters via the 'retry_delays' parameter.
             This defaults to [15, 30, 45]
 
-        :param timeout_print: If this parameter is set to True, timeout
+        :param print_timeout_text: If this parameter is set to True, timeout
             debug prints will be made visible! (e.g. '(Request timed out
             after 15 seconds. Retrying for 30 seconds.)')
             This defaults to False.
@@ -57,11 +57,11 @@ class NASAClient:
         # Default Timeout Retry Delays
         self._DEFAULT_RETRY_DELAYS = default_retry_delays or [30, 60, 90]
 
-        # Timeout Print
-        if timeout_print:
-            self._TIMEOUT_PRINT = "(Request timed out after {previous_delay} seconds. Retrying for {delay} seconds.)\n"
-        if not timeout_print:
-            self._TIMEOUT_PRINT = ""
+        # Timeout Text
+        if print_timeout_text:
+            self._TIMEOUT_TEXT = "(Request timed out after {previous_delay} seconds. Retrying for {delay} seconds.)\n"
+        if not print_timeout_text:
+            self._TIMEOUT_TEXT = ""
 
     def _get_data(
             self,
@@ -88,7 +88,7 @@ class NASAClient:
         for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
             if timing_out:
                 print(
-                    self._TIMEOUT_PRINT.format(
+                    self._TIMEOUT_TEXT.format(
                         previous_delay=previous_delay, delay=delay
                     )
                 )
