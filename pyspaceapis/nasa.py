@@ -58,10 +58,7 @@ class NASAClient:
         self._DEFAULT_RETRY_DELAYS = default_retry_delays or [30, 60, 90]
 
         # Timeout Text
-        if print_timeout_text:
-            self._TIMEOUT_TEXT = "(Request timed out after {previous_delay} seconds. Retrying for {delay} seconds.)\n"
-        if not print_timeout_text:
-            self._TIMEOUT_TEXT = ""
+        self._PRINT_TIMEOUT_TEXT = print_timeout_text
 
     def _get_data(
             self,
@@ -86,11 +83,10 @@ class NASAClient:
             params = {}
 
         for delay in retry_delays or self._DEFAULT_RETRY_DELAYS:
-            if timing_out:
+            if timing_out and self._PRINT_TIMEOUT_TEXT:
                 print(
-                    self._TIMEOUT_TEXT.format(
-                        previous_delay=previous_delay, delay=delay
-                    )
+                    f"(Request timed out after {previous_delay} seconds. "
+                    f"Retrying for {delay} seconds.)\n"
                 )
 
             try:
