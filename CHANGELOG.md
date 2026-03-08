@@ -6,76 +6,70 @@
 
 ## 0.2.0 - 2025-10-06
 
-- Added support for all NASA
+- **nasa.NASAClient:** Added support for all NASA
 EONET endpoints
 
 
-- Rephrased some text and fixed
+- **nasa.NASAClient:** Rephrased some text and fixed
 typos in docstrings
 
 ## 0.2.1 - 2025-10-07
 
-- Removed an extra second newline
+- **nasa.NASAClient:** Removed an extra second newline
 from HTTP Error messages
 
 ## 0.3.0 - 2025-10-10
 
-- Removed the `time_this` decorator
+- **nasa.NASAClient:** Removed the `time_this` decorator
 from class methods by default
 
 
-- Moved the `time_this` decorator
+- **debugtools.time_this:** Moved the `time_this` decorator
 into its own importable 'debugtools'
 module
 
 ## 0.4.0 - 2025-10-11
 
-- Changed PyPI/installation name to `pyspaceapis`
+- ***pyproject.toml:*** Changed PyPI/installation name to `pyspaceapis`
 due to a non-existent package
-apparently already owning it, and
-updated the README example accordingly
+apparently already owning it
 
 
-- Made errors now raise tracebacks
+- **nasa.NASAClient:** Made errors now raise tracebacks
 instead of simply printing an
 error message with an empty
 dict
 
 
-- Added missing documentation of NASA
-EONET endpoints to the README
-
-
-- Slightly improved the contents of
+- **nasa.NASAClient:** Slightly improved the contents of
 some docstrings
 
 ## 0.5.0 - 2025-10-20
 
-- Added customizable timeout handling and
+- **nasa.NASAClient:** Added customizable timeout handling and
 refactored error handling method for
 easier scalability
 
 
-- Added the ability to retrieve
+- **nasa.NASAClient:** Added the ability to retrieve
 Response header data as a
-dict and added documentation to
-the README accordingly
+dict
 
 
-- Updated the type annotation for
+- **nasa.NASAClient:** Updated the type annotation for
 the 'api_key' class parameter
 
 
-- Made the base URLs class
+- **nasa.NASAClient:** Made the base URLs class
 attributes rather than instance
 attributes
 
 ## 0.6.0 - 2026-1-14
 
-- Changed the package name from
+- ***pyproject.toml:*** Changed the package name from
 `pyspaceapi` to `pyspaceapis` to avoid
 confusion during installation and use
 
 
-- Corrected the documented maximum number
+- **nasa.NASAClient:** Corrected the documented maximum number
 of requests per API key
