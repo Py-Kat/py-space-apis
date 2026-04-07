@@ -1,0 +1,4 @@
+This project contains code developed by third parties:
+
+Requests
+Copyright 2019 Kenneth Reitz
