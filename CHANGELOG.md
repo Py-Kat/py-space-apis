@@ -73,3 +73,60 @@ confusion during installation and use
 
 - **nasa.NASAClient:** Corrected the documented maximum number
 of requests per API key
+
+## 0.7.0 - 2026-4-14
+
+- ***pyproject.toml:*** Confirm support for `Python 3.10` and
+`Python 3.14`
+
+
+- ***pyproject.toml:*** Require a Python version range
+of `>=3.10, <3.15`
+
+
+- **nasa.NASAClient:** Capitalized class and instance attributes
+to denote as constants
+
+
+- **nasa.NASAClient:** Refactored duplicated code for handling
+get requests and data retrieval
+into the `_get_data` internal class
+method
+
+
+- **nasa.NASAClient:** Updated and cleaned up type
+hinting within some class methods
+
+
+- **nasa.NASAClient:** Cast some overlooked instances of
+`int`, `float`, and `bool` to
+`str` when being passed as
+parameters to GET requests
+
+
+- **nasa.NASAClient:** Raise `ValueError` rather than `TypeError`
+if both `remaining_amount` and `total_amount`
+are false when using the
+`get_headers` class method, and updated
+the method docstring regarding this
+exception
+
+
+- **nasa.NASAClient:** Improved clarity of some possible
+exceptions
+
+
+- **nasa.NASAClient:** Increased the default amount of
+time within the `_DEFAULT_RETRY_DELAYS` instance
+attribute
+
+
+- **nasa.NASAClient:** Renamed the `timeout_print` parameter to
+`print_timeout_text` and renamed the `_TIMEOUT_PRINT`
+instance attribute to `_TIMEOUT_TEXT`
+
+
+- **nasa.NASAClient:** Fixed a bug where an
+empty line would still be
+printed if a request timed
+out while `print_timeout_text` was false
